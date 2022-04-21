@@ -1,7 +1,7 @@
 name: 'PR Docs Actions'
 description: 'Make pull request to be documents'
 inputs:
-  who-to-greet:  # id of input
+  myToken:  # id of input
     description: 'Who to greet'
     required: true
     default: 'World'
