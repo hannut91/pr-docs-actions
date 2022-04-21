@@ -8478,17 +8478,20 @@ const github = __nccwpck_require__(8432);
   const repo = github.context.payload.repository.name;
   const issueNumber = github.context.payload.number;
 
-  console.log('owner', owner);
-  console.log('repo', repo);
-  console.log('issueNumber', issueNumber);
-
   const octokit = github.getOctokit(myToken);
-  const result = await octokit.rest.issues.listEventsForTimeline({
+  const { data } = await octokit.rest.issues.listEventsForTimeline({
     owner,
     repo,
     issue_number: issueNumber,
   });
-  console.log('timeline', result);
+  data.forEach(({ message, body }) => {
+    if (message) {
+      console.log('message: ', message);
+    };
+    if (body) {
+      console.log('body: ', body);
+    };
+  });
 })();
 
 // try {
