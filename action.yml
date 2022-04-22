@@ -1,15 +1,12 @@
 name: 'PR Docs Actions'
 description: 'Make pull request to be documents'
-icon: book-open
-color: orange
+branding:
+  icon: book-open
+  color: orange
 inputs:
-  myToken:  # id of input
-    description: 'Who to greet'
+  myToken:
+    description: 'GitHub Token'
     required: true
-    default: 'World'
-outputs:
-  time: # id of output
-    description: 'The time we greeted you'
 runs:
   using: 'node16'
   main: 'dist/index.js'
