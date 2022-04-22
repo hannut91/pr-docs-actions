@@ -1,5 +1,7 @@
 name: 'PR Docs Actions'
 description: 'Make pull request to be documents'
+icon: book-open
+color: orange
 inputs:
   myToken:  # id of input
     description: 'Who to greet'
