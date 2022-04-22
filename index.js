@@ -1,6 +1,8 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
+const { createTempFolder } = require('./create-temp-folder');
+
 (async () => {
   const myToken = core.getInput('myToken');
 
@@ -22,4 +24,14 @@ const github = require('@actions/github');
       console.log('body: ', body);
     };
   });
+  
+
+  // 임시용 폴더 하나 만들고
+  // 깃 환경설정
+  // wiki.git pull 받고
+  // 파일 만들고
+  // 커밋하고
+  // 푸시
+
+  
 })();
