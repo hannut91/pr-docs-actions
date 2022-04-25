@@ -8331,6 +8331,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 2361:
 /***/ ((module) => {
 
@@ -8492,6 +8500,9 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
+const { writeFile } = __nccwpck_require__(3292);
+const { execSync } = __nccwpck_require__(2081);
+
 const core = __nccwpck_require__(4247);
 const github = __nccwpck_require__(8432);
 
@@ -8511,20 +8522,26 @@ const { createTempFolder } = __nccwpck_require__(3218);
     repo,
     issue_number: issueNumber,
   });
-  data.forEach(({ message, body }) => {
+  const content = data.reduce((acc, { message, body }) => {
     if (message) {
-      console.log('message: ', message);
-    };
+      return acc + `풀 리퀘스트 메시지: ${message}  \n`;
+    }
     if (body) {
-      console.log('body: ', body);
-    };
-  });
+      return acc + `커멘트: ${body}  \n`;
+    }
+
+    return acc;
+  }, '');
+
   const folder = await createTempFolder();
 
   const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
   execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
 
-  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, '안녕하세요');
+  execSync(`git config --global user.name "${process.env.GITHUB_ACTOR}"`);
+  execSync(`git config --global user.email "${process.env.GITHUB_ACTOR}@users.noreply.github.com"`);
+
+  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, content);
 
   execSync(`cd ${folder}/pr-docs-actions.wiki && git add . && git commit -m "test"`);
   execSync(`cd ${folder}/pr-docs-actions.wiki && git push`);
