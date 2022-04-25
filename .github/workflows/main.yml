@@ -1,6 +1,9 @@
 on:
   pull_request:
+    branches:
+      - main
     types: [closed]
+
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
@@ -9,6 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Hello world action step
+        if: github.event.pull_request.merged == true
         uses: ./
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}

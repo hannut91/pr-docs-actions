@@ -8501,7 +8501,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const { writeFile } = __nccwpck_require__(3292);
-const { execSync, exec } = __nccwpck_require__(2081);
+const { execSync } = __nccwpck_require__(2081);
 
 const core = __nccwpck_require__(4247);
 const github = __nccwpck_require__(8432);
@@ -8524,10 +8524,10 @@ const { createTempFolder } = __nccwpck_require__(3218);
   });
   const content = data.reduce((acc, { message, body }) => {
     if (message) {
-      return acc + `풀 리퀘스트 메시지: ${message}\n`;
+      return acc + `풀 리퀘스트 메시지: ${message}  \n`;
     }
     if (body) {
-      return acc + `커멘트: ${body}\n`;
+      return acc + `커멘트: ${body}  \n`;
     }
 
     return acc;

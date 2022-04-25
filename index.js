@@ -1,5 +1,5 @@
 const { writeFile } = require('fs/promises');
-const { execSync, exec } = require('child_process');
+const { execSync } = require('child_process');
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -22,10 +22,10 @@ const { createTempFolder } = require('./create-temp-folder');
   });
   const content = data.reduce((acc, { message, body }) => {
     if (message) {
-      return acc + `풀 리퀘스트 메시지: ${message}\n`;
+      return acc + `풀 리퀘스트 메시지: ${message}  \n`;
     }
     if (body) {
-      return acc + `커멘트: ${body}\n`;
+      return acc + `커멘트: ${body}  \n`;
     }
 
     return acc;
