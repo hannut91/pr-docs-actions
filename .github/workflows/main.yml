@@ -1,5 +1,6 @@
-on: [pull_request]
-
+on:
+  pull_request:
+    types: [closed]
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
@@ -11,3 +12,4 @@ jobs:
         uses: ./
         with:
           myToken: ${{ secrets.GITHUB_TOKEN }}
+          personalToken: ${{ secrets.PERSONAL_TOKEN }}

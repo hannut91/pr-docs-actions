@@ -1,6 +1,22 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 3218:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const { sep } = __nccwpck_require__(1017);
+const { tmpdir } = __nccwpck_require__(2037);
+const { mkdtemp } = __nccwpck_require__(3292);
+
+const createTempFolder = () => mkdtemp(`${tmpdir()}${sep}`);
+
+module.exports = {
+  createTempFolder
+};
+
+
+/***/ }),
+
 /***/ 9858:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -8331,6 +8347,14 @@ module.exports = require("fs");
 
 /***/ }),
 
+/***/ 3292:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("fs/promises");
+
+/***/ }),
+
 /***/ 3685:
 /***/ ((module) => {
 
@@ -8471,8 +8495,11 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(4247);
 const github = __nccwpck_require__(8432);
 
+const { createTempFolder } = __nccwpck_require__(3218);
+
 (async () => {
   const myToken = core.getInput('myToken');
+  const personalToken = core.getInput('personalToken');
 
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
@@ -8492,6 +8519,15 @@ const github = __nccwpck_require__(8432);
       console.log('body: ', body);
     };
   });
+  const folder = await createTempFolder();
+
+  const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
+  execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
+
+  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, '안녕하세요');
+
+  execSync(`cd ${folder}/pr-docs-actions.wiki && git add . && git commit -m "test"`);
+  execSync(`cd ${folder}/pr-docs-actions.wiki && git push`);
 })();
 
 })();
