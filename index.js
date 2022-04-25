@@ -5,6 +5,7 @@ const { createTempFolder } = require('./create-temp-folder');
 
 (async () => {
   const myToken = core.getInput('myToken');
+  const personalToken = core.getInput('personalToken');
 
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
@@ -24,14 +25,13 @@ const { createTempFolder } = require('./create-temp-folder');
       console.log('body: ', body);
     };
   });
-  
+  const folder = await createTempFolder();
 
-  // 임시용 폴더 하나 만들고
-  // 깃 환경설정
-  // wiki.git pull 받고
-  // 파일 만들고
-  // 커밋하고
-  // 푸시
+  const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
+  execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
 
-  
+  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, '안녕하세요');
+
+  execSync(`cd ${folder}/pr-docs-actions.wiki && git add . && git commit -m "test"`);
+  execSync(`cd ${folder}/pr-docs-actions.wiki && git push`);
 })();

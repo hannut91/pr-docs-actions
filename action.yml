@@ -7,6 +7,9 @@ inputs:
   myToken:
     description: 'GitHub Token'
     required: true
+  personalToken:
+    description: 'GitHub Personal Token'
+    required: true
 runs:
   using: 'node16'
   main: 'dist/index.js'
