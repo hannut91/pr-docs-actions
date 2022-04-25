@@ -8515,6 +8515,7 @@ const { createTempFolder } = __nccwpck_require__(3218);
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
   const issueNumber = github.context.payload.number;
+  console.log('github.context: ', github.context.issue);
   console.log('github.context.payload: ', github.context.payload);
 
   const octokit = github.getOctokit(myToken);
