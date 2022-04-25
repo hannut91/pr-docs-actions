@@ -8501,7 +8501,7 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const { writeFile } = __nccwpck_require__(3292);
-const { execSync } = __nccwpck_require__(2081);
+const { execSync, exec } = __nccwpck_require__(2081);
 
 const core = __nccwpck_require__(4247);
 const github = __nccwpck_require__(8432);
@@ -8534,6 +8534,9 @@ const { createTempFolder } = __nccwpck_require__(3218);
 
   const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
   execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
+
+  execSync(`git config user.name "${process.env.GITHUB_ACTOR}"`);
+  execSync(`git config user.email "${process.envGITHUB_ACTOR}@users.noreply.github.com"`);
 
   await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, '안녕하세요');
 

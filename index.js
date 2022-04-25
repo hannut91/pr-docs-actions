@@ -1,5 +1,5 @@
 const { writeFile } = require('fs/promises');
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -32,6 +32,9 @@ const { createTempFolder } = require('./create-temp-folder');
 
   const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
   execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
+
+  execSync(`git config user.name "${process.env.GITHUB_ACTOR}"`);
+  execSync(`git config user.email "${process.envGITHUB_ACTOR}@users.noreply.github.com"`);
 
   await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, '안녕하세요');
 
