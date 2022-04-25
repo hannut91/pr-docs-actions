@@ -1,5 +1,5 @@
 const { writeFile } = require('fs/promises');
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 
 const core = require('@actions/core');
 const github = require('@actions/github');
@@ -20,20 +20,26 @@ const { createTempFolder } = require('./create-temp-folder');
     repo,
     issue_number: issueNumber,
   });
-  data.forEach(({ message, body }) => {
+  const content = data.reduce((acc, { message, body }) => {
     if (message) {
-      console.log('message: ', message);
-    };
+      return acc + `풀 리퀘스트 메시지: ${message}\n`;
+    }
     if (body) {
-      console.log('body: ', body);
-    };
-  });
+      return acc + `커멘트: ${body}\n`;
+    }
+
+    return acc;
+  }, '');
+
   const folder = await createTempFolder();
 
   const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
   execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
 
-  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, '안녕하세요');
+  execSync(`git config --global user.name "${process.env.GITHUB_ACTOR}"`);
+  execSync(`git config --global user.email "${process.env.GITHUB_ACTOR}@users.noreply.github.com"`);
+
+  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, content);
 
   execSync(`cd ${folder}/pr-docs-actions.wiki && git add . && git commit -m "test"`);
   execSync(`cd ${folder}/pr-docs-actions.wiki && git push`);
