@@ -8331,6 +8331,14 @@ module.exports = require("assert");
 
 /***/ }),
 
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 2361:
 /***/ ((module) => {
 
@@ -8492,6 +8500,9 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
+const { writeFile } = __nccwpck_require__(3292);
+const { execSync } = __nccwpck_require__(2081);
+
 const core = __nccwpck_require__(4247);
 const github = __nccwpck_require__(8432);
 
