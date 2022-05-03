@@ -2,7 +2,7 @@ name: Pull wiki
 
 on:
   workflow_run:
-    workflows: ["Closed"]
+    workflows: [Closed]
     types:
       - completed
 
