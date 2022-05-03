@@ -8500,7 +8500,7 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const { writeFile } = __nccwpck_require__(3292);
+const { writeFile, readFileSync } = __nccwpck_require__(3292);
 const { execSync } = __nccwpck_require__(2081);
 
 const core = __nccwpck_require__(4247);
@@ -8508,15 +8508,15 @@ const github = __nccwpck_require__(8432);
 
 const { createTempFolder } = __nccwpck_require__(3218);
 
+const issueNumber = Number(fs.readFileSync('./pr'));
+
 (async () => {
   const myToken = core.getInput('myToken');
   const personalToken = core.getInput('personalToken');
 
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
-  const issueNumber = github.context.payload.number;
-  console.log('github.context: ', github.context.issue);
-  console.log('github.context.payload: ', github.context.payload);
+  // const issueNumber = github.context.payload.number;
 
   const octokit = github.getOctokit(myToken);
   const { data } = await octokit.rest.issues.listEventsForTimeline({

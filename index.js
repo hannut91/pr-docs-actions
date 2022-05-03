@@ -1,4 +1,4 @@
-const { writeFile } = require('fs/promises');
+const { writeFile, readFileSync } = require('fs/promises');
 const { execSync } = require('child_process');
 
 const core = require('@actions/core');
@@ -6,15 +6,15 @@ const github = require('@actions/github');
 
 const { createTempFolder } = require('./create-temp-folder');
 
+const issueNumber = Number(fs.readFileSync('./pr'));
+
 (async () => {
   const myToken = core.getInput('myToken');
   const personalToken = core.getInput('personalToken');
 
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
-  const issueNumber = github.context.payload.number;
-  console.log('github.context: ', github.context.issue);
-  console.log('github.context.payload: ', github.context.payload);
+  // const issueNumber = github.context.payload.number;
 
   const octokit = github.getOctokit(myToken);
   const { data } = await octokit.rest.issues.listEventsForTimeline({
