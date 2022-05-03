@@ -1,0 +1,25 @@
+name: Pull wiki
+
+on:
+  workflow_run:
+    workflows: ["Closed"]
+    types:
+      - completed
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: pr
+          path: pr
+      - run: ls
+      - run: cat pr
+      # - name: Hello world action step
+      #   uses: ./
+      #   with:
+      #     myToken: ${{ secrets.GITHUB_TOKEN }}
+      #     personalToken: ${{ secrets.PERSONAL_TOKEN }}
