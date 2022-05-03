@@ -12,12 +12,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - uses: actions/download-artifact@v3
+      - name: 'Download artifact'
+        uses: actions/github-script@v6
         with:
-          name: pr
-          path: pr
-      - run: ls
-      - run: cat pr
+          script: |
+            let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               run_id: context.payload.workflow_run.id,
+            });
+            let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
+              return artifact.name == "pr"
+            })[0];
+            let download = await github.rest.actions.downloadArtifact({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               artifact_id: matchArtifact.id,
+               archive_format: 'zip',
+            });
+            let fs = require('fs');
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr.zip`, Buffer.from(download.data));
+
+      - name: 'Unzip artifact'
+        run: unzip pr.zip
+      - run: cat pr/pr
       # - name: Hello world action step
       #   uses: ./
       #   with:
