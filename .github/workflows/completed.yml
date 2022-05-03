@@ -35,7 +35,7 @@ jobs:
 
       - name: 'Unzip artifact'
         run: unzip pr.zip
-      - run: cat pr/pr
+      - run: cat pr
       # - name: Hello world action step
       #   uses: ./
       #   with:
