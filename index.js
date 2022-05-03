@@ -1,4 +1,5 @@
-const { writeFile, readFileSync } = require('fs/promises');
+const { writeFile } = require('fs/promises');
+const { readFileSync } = require('fs');
 const { execSync } = require('child_process');
 
 const core = require('@actions/core');
@@ -6,7 +7,7 @@ const github = require('@actions/github');
 
 const { createTempFolder } = require('./create-temp-folder');
 
-const issueNumber = Number(fs.readFileSync('./pr'));
+const issueNumber = Number(readFileSync('./pr'));
 
 (async () => {
   const myToken = core.getInput('myToken');
