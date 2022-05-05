@@ -1,6 +1,34 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 4051:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const github = __nccwpck_require__(8432);
+
+const readTimelines = async ({
+  githubToken,
+  owner,
+  repo,
+  issueNumber,
+}) => {
+  const octokit = github.getOctokit(githubToken);
+  const { data } = await octokit.rest.issues.listEventsForTimeline({
+    owner,
+    repo,
+    issue_number: issueNumber,
+  });
+
+  return data;
+};
+
+module.exports = {
+  readTimelines,
+};
+
+
+/***/ }),
+
 /***/ 3218:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -8539,6 +8567,7 @@ const { execSync } = __nccwpck_require__(2081);
 const github = __nccwpck_require__(8432);
 
 const { readProperty } = __nccwpck_require__(1157);
+const { readTimelines } = __nccwpck_require__(4051);
 const { createTempFolder } = __nccwpck_require__(3218);
 
 // const {
