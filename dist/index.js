@@ -8398,6 +8398,31 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 9063:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const { writeFile } = __nccwpck_require__(3292);
+const { execSync } = __nccwpck_require__(2081);
+
+const uploadContent = async ({ folder, content, issueNumber, wikiRepo, actor }) => {
+  execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
+
+  execSync(`git config --global user.name "${actor}"`);
+  execSync(`git config --global user.email "${actor}@users.noreply.github.com"`);
+
+  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, content);
+
+  execSync(`cd ${folder}/pr-docs-actions.wiki && git add . && git commit -m "test"`);
+  execSync(`cd ${folder}/pr-docs-actions.wiki && git push`);
+};
+
+module.exports = {
+  uploadContent
+};
+
+
+/***/ }),
+
 /***/ 4255:
 /***/ ((module) => {
 
@@ -8583,13 +8608,11 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
-const { writeFile } = __nccwpck_require__(3292);
-const { execSync } = __nccwpck_require__(2081);
-
 const { readProperty } = __nccwpck_require__(1157);
 const { readTimelines } = __nccwpck_require__(4051);
 const { createTempFolder } = __nccwpck_require__(3218);
 const { createContent } = __nccwpck_require__(4734);
+const { uploadContent } = __nccwpck_require__(9063);
 
 // const {
 //   githubToken,
@@ -8628,17 +8651,12 @@ const { createContent } = __nccwpck_require__(4734);
 
   // uploadContent
   const folder = await createTempFolder();
-
+  
   const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
-  execSync(`git clone ${wikiRepo} ${folder}/pr-docs-actions.wiki`);
+  const actor = process.env.GITHUB_ACTOR;
 
-  execSync(`git config --global user.name "${process.env.GITHUB_ACTOR}"`);
-  execSync(`git config --global user.email "${process.env.GITHUB_ACTOR}@users.noreply.github.com"`);
+  await uploadContent({ folder, content, issueNumber, wikiRepo, actor });
 
-  await writeFile(`${folder}/pr-docs-actions.wiki/${issueNumber}.md`, content);
-
-  execSync(`cd ${folder}/pr-docs-actions.wiki && git add . && git commit -m "test"`);
-  execSync(`cd ${folder}/pr-docs-actions.wiki && git push`);
 })();
 
 })();
