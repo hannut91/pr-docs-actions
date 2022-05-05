@@ -37,5 +37,5 @@ jobs:
       - name: Hello world action step
         uses: ./
         with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           personalToken: ${{ secrets.PERSONAL_TOKEN }}
