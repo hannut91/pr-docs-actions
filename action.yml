@@ -4,7 +4,7 @@ branding:
   icon: book-open
   color: orange
 inputs:
-  myToken:
+  githubToken:
     description: 'GitHub Token'
     required: true
   personalToken:

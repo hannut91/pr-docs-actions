@@ -17,6 +17,39 @@ module.exports = {
 
 /***/ }),
 
+/***/ 1157:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const { readFileSync } = __nccwpck_require__(7147);
+
+const core = __nccwpck_require__(4247);
+const github = __nccwpck_require__(8432);
+
+const readProperty = () => {
+  const githubToken = core.getInput('githubToken');
+  const personalToken = core.getInput('personalToken');
+
+  const owner = github.context.payload.repository.owner.login;
+  const repo = github.context.payload.repository.name;
+
+  const issueNumber = Number(readFileSync('./pr'));
+
+  return {
+    githubToken,
+    personalToken,
+    owner,
+    repo,
+    issueNumber,
+  }
+};
+
+module.exports = {
+  readProperty
+};
+
+
+/***/ }),
+
 /***/ 9858:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -8501,30 +8534,47 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 const { writeFile } = __nccwpck_require__(3292);
-const { readFileSync } = __nccwpck_require__(7147);
 const { execSync } = __nccwpck_require__(2081);
 
-const core = __nccwpck_require__(4247);
 const github = __nccwpck_require__(8432);
 
+const { readProperty } = __nccwpck_require__(1157);
 const { createTempFolder } = __nccwpck_require__(3218);
 
-const issueNumber = Number(readFileSync('./pr'));
-
+// const {
+//   githubToken,
+//   personalToken,
+//   owner,
+//   repo,
+//   issueNumber,
+// } = readProperty();
+// const timelines = readTimelines({
+//   githubToken,
+//   owner,
+//   repo,
+//   issueNumber,
+// });
+// const content = createContent(timelines);
+// uploadContent(content);
 (async () => {
-  const myToken = core.getInput('myToken');
-  const personalToken = core.getInput('personalToken');
+  // readProperty
+  const {
+    githubToken,
+    personalToken,
+    owner,
+    repo,
+    issueNumber,
+  } = readProperty();
 
-  const owner = github.context.payload.repository.owner.login;
-  const repo = github.context.payload.repository.name;
-  // const issueNumber = github.context.payload.number;
-
-  const octokit = github.getOctokit(myToken);
+  // readTimelines
+  const octokit = github.getOctokit(githubToken);
   const { data } = await octokit.rest.issues.listEventsForTimeline({
     owner,
     repo,
     issue_number: issueNumber,
   });
+
+  // createContent
   const content = data.reduce((acc, { message, body }) => {
     if (message) {
       return acc + `풀 리퀘스트 메시지: ${message}  \n`;
@@ -8536,6 +8586,7 @@ const issueNumber = Number(readFileSync('./pr'));
     return acc;
   }, '');
 
+  // uploadContent
   const folder = await createTempFolder();
 
   const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
