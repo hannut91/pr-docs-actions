@@ -8567,11 +8567,11 @@ const { createTempFolder } = __nccwpck_require__(3218);
   } = readProperty();
 
   // readTimelines
-  const octokit = github.getOctokit(githubToken);
-  const { data } = await octokit.rest.issues.listEventsForTimeline({
+  const data = await readTimelines({
+    githubToken,
     owner,
     repo,
-    issue_number: issueNumber,
+    issueNumber,
   });
 
   // createContent
