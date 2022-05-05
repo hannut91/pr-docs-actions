@@ -1,11 +1,10 @@
 const { writeFile } = require('fs/promises');
 const { execSync } = require('child_process');
 
-const github = require('@actions/github');
-
 const { readProperty } = require('./metadata');
 const { readTimelines } = require('./api/github');
 const { createTempFolder } = require('./create-temp-folder');
+const { createContent } = require('./content');
 
 // const {
 //   githubToken,
@@ -33,24 +32,14 @@ const { createTempFolder } = require('./create-temp-folder');
   } = readProperty();
 
   // readTimelines
-  const data = await readTimelines({
+  const timelines = await readTimelines({
     githubToken,
     owner,
     repo,
     issueNumber,
   });
 
-  // createContent
-  const content = data.reduce((acc, { message, body }) => {
-    if (message) {
-      return acc + `풀 리퀘스트 메시지: ${message}  \n`;
-    }
-    if (body) {
-      return acc + `커멘트: ${body}  \n`;
-    }
-
-    return acc;
-  }, '');
+  const content = createContent(timelines);
 
   // uploadContent
   const folder = await createTempFolder();

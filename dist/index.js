@@ -29,6 +29,28 @@ module.exports = {
 
 /***/ }),
 
+/***/ 4734:
+/***/ ((module) => {
+
+const createContent = (timelines) => timelines
+  .reduce((acc, { message, body }) => {
+    if (message) {
+      return acc + `풀 리퀘스트 메시지: ${message}  \n`;
+    }
+    if (body) {
+      return acc + `커멘트: ${body}  \n`;
+    }
+
+    return acc;
+  }, '');
+
+module.exports = {
+  createContent
+};
+
+
+/***/ }),
+
 /***/ 3218:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -8564,11 +8586,10 @@ var __webpack_exports__ = {};
 const { writeFile } = __nccwpck_require__(3292);
 const { execSync } = __nccwpck_require__(2081);
 
-const github = __nccwpck_require__(8432);
-
 const { readProperty } = __nccwpck_require__(1157);
 const { readTimelines } = __nccwpck_require__(4051);
 const { createTempFolder } = __nccwpck_require__(3218);
+const { createContent } = __nccwpck_require__(4734);
 
 // const {
 //   githubToken,
@@ -8596,24 +8617,14 @@ const { createTempFolder } = __nccwpck_require__(3218);
   } = readProperty();
 
   // readTimelines
-  const data = await readTimelines({
+  const timelines = await readTimelines({
     githubToken,
     owner,
     repo,
     issueNumber,
   });
 
-  // createContent
-  const content = data.reduce((acc, { message, body }) => {
-    if (message) {
-      return acc + `풀 리퀘스트 메시지: ${message}  \n`;
-    }
-    if (body) {
-      return acc + `커멘트: ${body}  \n`;
-    }
-
-    return acc;
-  }, '');
+  const content = createContent(timelines);
 
   // uploadContent
   const folder = await createTempFolder();
