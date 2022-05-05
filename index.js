@@ -4,6 +4,7 @@ const { execSync } = require('child_process');
 const github = require('@actions/github');
 
 const { readProperty } = require('./metadata');
+const { readTimelines } = require('./api/github');
 const { createTempFolder } = require('./create-temp-folder');
 
 // const {
