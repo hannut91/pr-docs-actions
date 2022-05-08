@@ -10,14 +10,18 @@ const readProperty = () => {
   const owner = github.context.payload.repository.owner.login;
   const repo = github.context.payload.repository.name;
 
+  const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
+  const actor = process.env.GITHUB_ACTOR;
+
   const issueNumber = Number(readFileSync('./pr'));
 
   return {
     githubToken,
-    personalToken,
     owner,
     repo,
     issueNumber,
+    wikiRepo,
+    actor,
   }
 };
 
