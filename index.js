@@ -7,10 +7,11 @@ const { uploadContent } = require('./wiki');
 (async () => {
   const {
     githubToken,
-    personalToken,
     owner,
     repo,
     issueNumber,
+    wikiRepo,
+    actor,
   } = readProperty();
 
   const timelines = await readTimelines({
@@ -24,8 +25,6 @@ const { uploadContent } = require('./wiki');
 
   const folder = await createTempFolder();
 
-  const wikiRepo = `https://${personalToken}@github.com/${process.env.GITHUB_REPOSITORY}.wiki.git`;
-  const actor = process.env.GITHUB_ACTOR;
 
   await uploadContent({ folder, content, issueNumber, wikiRepo, actor });
 })();
